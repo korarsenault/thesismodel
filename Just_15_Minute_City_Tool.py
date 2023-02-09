@@ -1,5 +1,5 @@
 import os
-import numpy as np
+from numpy import *
 import arcpy
 from arcpy.sa import *
 
@@ -218,42 +218,51 @@ val7 = arcpy.GetParameterAsText(17)
 
 
 #ped weighted sum
-outWeightedSum1 = WeightedSum(WSTable([["SCHOOL_DIST_CAT_PED_RASTER", "VALUE", val1],
+wsumobj1 = WSTable([["SCHOOL_DIST_CAT_PED_RASTER", "VALUE", val1],
                                       ["PARK_DIST_CAT_PED_RASTER", "VALUE", val2],
                                       ["POLL_DIST_CAT_PED_RASTER", "VALUE", val4],
                                       ["MED_DIST_CAT_PED_RASTER", "VALUE",val5],
                                       ["GROCERY_DIST_CAT_PED_RASTER", "VALUE", val6],
                                       ["TRANSIT_DIST_CAT_PED_RASTER", "VALUE", val7],
-                                      ["LIB_DIST_CAT_PED_RASTER", "VALUE", val3]]))
-outWeightedSum1.save(r"C:\Users\korey\Documents\ArcGIS\Projects\ScriptTest11_7\ScriptTest11_7.gdb\Weighted_Ped_Raster_Tool")
+                                      ["LIB_DIST_CAT_PED_RASTER", "VALUE", val3]])
+
+outWeightedSum1 = WeightedSum(wsumobj1)
+
+ped = outWeightedSum1.save(gdb_worksp + '\\' + "Weighted_Ped_Raster_Tool")
 
 #bike weighted sum
-outWeightedSum2 = WeightedSum(WSTable([["SCHOOL_DIST_CAT_BIKE_RASTER", "VALUE", val1],
+wsumobj2 = WSTable([["SCHOOL_DIST_CAT_BIKE_RASTER", "VALUE", val1],
                                       ["LIB_DIST_CAT_BIKE_RASTER", "VALUE", val3],
                                       ["PARK_DIST_CAT_BIKE_RASTER", "VALUE", val2],
                                       ["POLL_DIST_CAT_BIKE_RASTER", "VALUE", val4],
                                       ["MED_DIST_CAT_BIKE_RASTER", "VALUE", val5],
                                       ["GROCERY_DIST_CAT_BIKE_RASTER", "VALUE", val6],
-                                      ["TRANSIT_DIST_CAT_BIKE_RASTER", "VALUE", val7]]))
-outWeightedSum2.save(r"C:\Users\korey\Documents\ArcGIS\Projects\ScriptTest11_7\ScriptTest11_7.gdb\Weighted_Bike_Raster_Tool")
+                                      ["TRANSIT_DIST_CAT_BIKE_RASTER", "VALUE", val7]])
+
+outWeightedsum2 = WeightedSum(wsumobj2)
+
+bike = outWeightedSum2.save(gdb_worksp + '\\' + "Weighted_Bike_Raster_Tool")
 
 
 
 #escoot weighted sum
-outWeightedSum3 = WeightedSum(WSTable([["SCHOOL_DIST_CAT_ESCOOTER_RASTER", "VALUE", val1],
+wsumobj3 = WSTable([["SCHOOL_DIST_CAT_ESCOOTER_RASTER", "VALUE", val1],
                                       ["LIB_DIST_CAT_ESCOOTER_RASTER", "VALUE", val3],
-                                      ["PARK_DIST_CAT_ESCOOTER_RASTER", "VALUE", val2],
+                                      ["PARK_DIST_CrAT_ESCOOTER_RASTER", "VALUE", val2],
                                       ["POLL_DIST_CAT_ESCOOTER_RASTER", "VALUE", val4],
                                       ["MED_DIST_CAT_ESCOOTER_RASTER", "VALUE", val5],
                                       ["GROCERY_DIST_CAT_ESCOOTER_RASTER", "VALUE", val6],
-                                      ["TRANSIT_DIST_CAT_ESCOOTER_RASTER", "VALUE", val7]]))
-outWeightedSum3.save(r"C:\Users\korey\Documents\ArcGIS\Projects\ScriptTest11_7\ScriptTest11_7.gdb\Weighted_Escoot_Raster_Tool")
+                                      ["TRANSIT_DIST_CAT_ESCOOTER_RASTER", "VALUE", val7]])
+
+outWeightedsum3 = WeightedSum(wsumobj3)
+
+escoot = outWeightedSum3.save(gdb_worksp + '\\' +"Weighted_Escoot_Raster_Tool")
 
 
 #raster to points
-arcpy.conversion.RasterToPoint("Weighted_Ped_Raster_Tool", "PedRasterPoints")
-arcpy.conversion.RasterToPoint("Weighted_Bike_Raster_Tool", "BikeRasterPoints")
-arcpy.conversion.RasterToPoint("Weighted_Escoot_Raster_Tool", "EscootRasterPoints")
+arcpy.conversion.RasterToPoint(ped, "PedRasterPoints")
+arcpy.conversion.RasterToPoint(bike, "BikeRasterPoints")
+arcpy.conversion.RasterToPoint(escoot, "EscootRasterPoints")
 
 #spatial join
 arcpy.analysis.SpatialJoin(schema, "PedRasterPoints", "PedInBlocks", "JOIN_ONE_TO_ONE", "", "", "CONTAINS", "", "")
@@ -285,14 +294,18 @@ val8 = arcpy.GetParameterAsText(18)
 val9 = arcpy.GetParameterAsText(19)
 val10 = arcpy.GetParameterAsText(20)
 
-outWeightedSum2 = WeightedSum(WSTable([["Weighted_Ped_Raster_Tool", "VALUE", val8],
+wsumobj4 = WSTable([["Weighted_Ped_Raster_Tool", "VALUE", val8],
                                       ["Weighted_Bike_Raster_Tool", "VALUE", val9],
-                                      ["Weighted_Escoot_Raster_Tool", "VALUE", val10]]))
-outWeightedSum2.save(r"C:\Users\korey\Documents\ArcGIS\Projects\ScriptTest11_7\ScriptTest11_7.gdb\Agg_Weight")
+                                      ["Weighted_Escoot_Raster_Tool", "VALUE", val10]])
+
+outWeightedsum4 = WeightedSum(wsumobj4)
+
+
+agg_weight = outWeightedSum4.save(gdb_worksp + '\\' + "Agg_Weight")
 
 
 #raster to point
-arcpy.conversion.RasterToPoint("Agg_Weight", "AggregateRasterPoints", "VALUE")
+arcpy.conversion.RasterToPoint(agg_weight, "AggregateRasterPoints", "VALUE")
 
 #spatial join
 arcpy.analysis.SpatialJoin(schema, "AggregateRasterPoints", "AggregateRasterPointsinSchema", "JOIN_ONE_TO_ONE", "", "", "CONTAINS", "", "")
@@ -302,24 +315,3 @@ arcpy.analysis.SpatialJoin("AggregateRasterPointsinSchema", bgpoints, "Aggregate
 
 #alter field
 final2 = arcpy.management.AlterField("AggregateIndex", "GRID_CODE", "AggregateRanking", "AggregateRanking", "", "", "", "")
-
-
-# output_fc1 = arcpy.GetParameterAsText(21)
-# output_fc2 = arcpy.GetParameterAsText(22)
-# arcpy.management.CopyFeatures(final2, output_fc1)
-# arcpy.management.CopyFeatures(final3, output_fc2)
-
-
-# # final selection
-# output_gdb = arcpy.GetParameterAsText(9)
-# output_fc = arcpy.GetParameter(10)
-
-# ow = arcpy.GetParameter(11)
-# if ow is True:
-#     arcpy.env.overwriteOutput = True
-# arcpy.AddMessage(str(ow))
-
-
-# finalselect1 = arcpy.management.SelectLayerByAttribute('high_best','NEW_SELECTION', 
-#                                                        "FinalDiv > 0.5")
-# arcpy.management.CopyFeatures(finalselect1, output_fc)
