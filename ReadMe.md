@@ -8,7 +8,7 @@ This tool uses Fainstein's Just City framework and the idea of a 15-minute city 
 
 The tool is based on the following model 
 
-![GIS Model.](Model 2white.png)
+![GIS Model.](Model2white.png)
 
 ## 2. Tool Set Up
 
@@ -22,7 +22,7 @@ The tool is based on the following model
 Parameters must be defined to create the GUI.
 
 Copy the format of this image
-![GUI](Model2white.png)
+![GUI](params.png)
 
 - Parameter 0 is the scale of operation
 - Parameter 1 sets the boundary
