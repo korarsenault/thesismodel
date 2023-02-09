@@ -22,7 +22,7 @@ The tool is based on the following model
 Parameters must be defined to create the GUI.
 
 Copy the format of this image
-![GUI](params.png)
+![Parameters](params.png)
 
 - Parameter 0 is the scale of operation
 - Parameter 1 sets the boundary
@@ -32,3 +32,10 @@ Copy the format of this image
 - Parameters 11-17 set the weights for each community resource
 - Parameters 18-20 set the weights for each mode for the aggregate analysis
 - The last two set the names of the outputs
+
+## 4. GUI
+
+Properly installed gUI will look like this
+
+![Top section of GUI](gui1.png)
+![Bottom section of GUI](gui2.png)
